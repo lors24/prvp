@@ -8,6 +8,8 @@ Q = M(2,2); %capacidad, basta con leer uno porque todos los vehiculos tienen la 
 
 %Leer las posiciones de los nodos
 
+pos = M(p+2:end,2:3)
+
 
 end
 
