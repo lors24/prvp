@@ -1,0 +1,40 @@
+%Script para correr el PRVP
+
+%Paso 1: Leer informaci?n
+
+filename = 'p14.csv';
+
+[m,n,p,Q,d,qi,fi,aks] = leer_datos(filename);
+
+
+%crear matriz Vk
+
+V = zeros(p,n);
+
+for k=1:p %para cada dia
+    for i=1:n %para cada cliente
+        total = 0;
+        for v=1:max_comb %por cada combinacion
+            if b(i,v) ~= 0
+                val = aks(k,b(i,v))=='1';
+                total = total + val;
+            end
+        end
+        if total >= 1 
+            V(k,i) = 1;
+        end
+    end
+end
+
+%Finalmente: crear matriz I
+
+I = zeros(n,n);
+
+for i=1:n
+    for j=i:n
+        if max(V(:,i)+V(:,j))==2 
+            I(i,j) = 1;
+            I(j,i) = 1;
+        end
+    end
+end   

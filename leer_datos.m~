@@ -1,4 +1,14 @@
 function [datos] = leer_datos(filename )
+
+%Funcion que lee los datos del csv con el formato establecido en
+% http://neumann.hec.ca/chairedistributique/data/pvrp/old/
+
+% INPUT:
+
+%filename: nombre del archivo csv
+
+% OUTPUT
+
 M = csvread(filename);
 m = M(1,2); %numero de vehiculos
 n = M(1,3); %numero de clientes
@@ -6,13 +16,12 @@ p = M(1,4); %numero de dias del periodo
 
 Q = M(2,2); %capacidad, basta con leer uno porque todos los vehiculos tienen la misma capacidad
 
-%Leer las posiciones de los nodos
 
 %renglon en el que comienzan los clientes = p+3
 
-ini = p+2;
+ini = p+2; 
 
-pos = M(ini:end,2:3);
+pos = M(ini:end,2:3); %Leer las posiciones de los nodos
 
 %Crear matriz de distancias
 
@@ -34,20 +43,71 @@ end
 
 qs = M(ini+1:end,5);
 fs = M(ini+1:end,6);
-num_combs = M(ini+1:end,7);
+%num_combs = M(ini+1:end,7);
 
-datos = {m,n,p,Q,d,qs,fs,num_combs};
+max_comb = max(M(ini+1:end,7)); %Maximo numero de combinaciones
 
-aks_aux = cellstr(dec2bin(1:(2^p)-1)) %todas las combinaciones de dias posibles
+%datos = {m,n,p,Q,d,qs,fs,num_combs};
 
-comb = M(ini+1:end,8:end) %leer combinaciones de cada cliente
-out=cellstr(dec2bin(comb,4)) %pasar a decimal
-[~,b]=ismember(out,aks_aux)  % ver que combinacion de aks le pertence
-b = reshape(b,
-for i = 1:n
-    X{i} = dec2bin(M(ini+i,8:8+num_combs(i)-1),4);
+aks_aux = cellstr(dec2bin(1:(2^p)-1)); %todas las combinaciones de dias posibles
+
+comb = cellstr(dec2bin(M(ini+1:end,8:end),4)); %leer combinaciones y pasarlas a binario
+[~,b]=ismember(comb,aks_aux);  % ver que combinacion de aks le pertence
+b = reshape(b,n,p); %pasar a forma de matriz
+aks = (dec2bin(1:(2^p)-1))';
+
+%crear matriz Vk
+
+V = zeros(p,n);
+
+for k=1:p %para cada dia
+    for i=1:n %para cada cliente
+        total = 0;
+        for v=1:max_comb %por cada combinacion
+            if b(i,v) ~= 0
+                val = aks(k,b(i,v))=='1';
+                total = total + val;
+            end
+        end
+        if total >= 1 
+            V(k,i) = 1;
+        end
+    end
 end
 
-X
+%Finalmente: crear matriz I
+
+I = zeros(n,n);
+
+for i=1:n
+    for j=i:n
+        if max(V(:,i)+V(:,j))==2 
+            I(i,j) = 1;
+            I(j,i) = 1;
+        end
+    end
+end   
+        
+    
+
+
+
+
+
+
+
+
+
+%Total de rutas
+
+%res = 0
+
+%for i = 1:n
+%    res = res + nchoosek(n,1);
+%end
+
+
+
+end
 
 
