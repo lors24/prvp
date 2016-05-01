@@ -5,6 +5,8 @@
 filename = 'p14.csv';
 
 [m,n,p,Q,d,qi,fi,aks,Ci] = leer_datos(filename);
+m_bar = m*p; %numero de vehiculos en todo el periodo
+
 
 % Paso 2: crear matriz Vk
 
@@ -27,7 +29,7 @@ for k=1:p %para cada dia
     end
 end
 
-%Finalmente: crear matriz I
+%Paso 3: crear matriz I
 
 I = zeros(n,n);
 
@@ -39,6 +41,16 @@ for i=1:n
         end
     end
 end   
+
+%Paso 4: crear vector de cantidades posibles
+
+Q_hat = cantidades(n, qi, Q );
+
+%Paso 5: dado lambda calcular solucion w y theta
+
+lambda = zeros(n+1,1); %vector inicial de lambdas
+
+[f,R,psi,R_t,Q_hat] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,lambda)
 
 
 
