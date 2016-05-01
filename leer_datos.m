@@ -79,6 +79,25 @@ for i=1:n
 end   
         
     
+
+
+
+
+
+
+
+
+
+%Total de rutas
+
+%res = 0
+
+%for i = 1:n
+%    res = res + nchoosek(n,1);
+%end
+
+
+
 end
 
 
