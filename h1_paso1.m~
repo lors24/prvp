@@ -1,4 +1,4 @@
-function [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,q,fi,lambda)
+function [f,R,psi,R_t,Q_hat] = h1_paso1(n,Q_hat,m_bar,d,q,fi,lambda)
 %PARAMETROS
 
 %n = numero de clientes 
@@ -98,8 +98,6 @@ for i=1:n
         rho(j,i) = sum(R_t{b,i} == j);
     end
 end
-
-w = [lambda(1);w];
 
 theta_1 = zeros(n,1);
 theta_0 = m_bar;

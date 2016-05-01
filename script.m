@@ -50,9 +50,11 @@ Q_hat = cantidades(n, qi, Q );
 
 lambda = zeros(n+1,1); %vector inicial de lambdas
 
-[f,R,psi,R_t,Q_hat] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,lambda)
+[f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,lambda);
 
+%Paso 6: Calcular z(DRF(lambda))
 
+ z_lambda = zDRF_lambda(n, m_bar,fi,w);
 
 %Total de rutas
 
