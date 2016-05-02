@@ -1,4 +1,4 @@
-function [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,q,fi,lambda)
+function [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,q,fi,I,lambda)
 %PARAMETROS
 
 %n = numero de clientes 
@@ -19,6 +19,17 @@ for i = 1:n+1;
             d_tilde(i,j)=d(i,j)-0.5*lambda(i)-0.5*lambda(j);
         end
 end
+
+%Condicion de compatibilidad 
+
+for i=1:n
+    for j = 1:n
+        if I(i,j) == 0
+            d_tilde(i+1,j+1)=Inf;
+        end
+    end
+end
+
 
 q_n = length(Q_hat); %numero de cantidades posibles
 
@@ -91,9 +102,9 @@ rho = zeros(n);
 q_min = zeros(1,n);
 
 for i=1:n
-    [a,b]=min(psi(:,i)./Q_hat);
+    [a,b]=min(psi(:,i)./Q_hat');
     w(i) = q(i)*a+lambda(i+1);
-    q_min(i) = Q_hat(b);
+    q_min(i) = Q_hat(b); %ruta q de minimo costo
     for j=1:n
         rho(j,i) = sum(R_t{b,i} == j);
     end
@@ -104,14 +115,8 @@ w = [lambda(1);w];
 theta_1 = zeros(n,1);
 theta_0 = m_bar;
 
-for j=1:n
-    aux = 0;
-    for i=1:n
-        aux = aux + (fi(i)*rho(j,i)*q(i))/(q_min(i));
-    end
-    theta_1(j) = fi(j)-aux;
-    theta_0 = theta_0 - (fi(j)*q(j))/q_min(j);
-end
+theta_1 = fi-rho*(fi.*q)./q_min';
+theta_0 = m_bar -sum((fi.*q)./q_min');
 
 theta = [theta_0;theta_1];
 

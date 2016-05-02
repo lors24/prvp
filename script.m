@@ -44,18 +44,32 @@ end
 
 %Paso 4: crear vector de cantidades posibles
 
-Q_hat = cantidades(n, qi, Q );
+Q_hat = cantidades(qi, Q );
 
 %Paso 5: dado lambda calcular solucion w y theta
 
 lambda = zeros(n+1,1); %vector inicial de lambdas
 
-[f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,lambda);
+[f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
 
 %Paso 6: Calcular z(DRF(lambda))
 
  z_lambda = zDRF_lambda(n, m_bar,fi,w);
 
+%Paso 7: Actualizar lambda
+
+max_iter = 50;
+
+for i=1:max_iter
+    epsilon = 1/i;
+    lambda(1) = lambda(1)+2*epsilon*theta(1);
+    lambda(2:end) = lambda(2:end)+2*epsilon*theta(2:end);
+    [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
+    z_lambda(i) = zDRF_lambda(n, m_bar,fi,w);
+end
+
+plot(1:max_iter,z_lambda)
+ 
 %Total de rutas
 
 %res = 0
