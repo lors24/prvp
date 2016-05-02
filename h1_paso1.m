@@ -112,9 +112,6 @@ end
 
 w = [lambda(1);w];
 
-theta_1 = zeros(n,1);
-theta_0 = m_bar;
-
 theta_1 = fi-rho*(fi.*q)./q_min';
 theta_0 = m_bar -sum((fi.*q)./q_min');
 

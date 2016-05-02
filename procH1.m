@@ -1,8 +1,8 @@
-%Script para correr el PRVP
+function [z] = procH1( filename, max_iter )
+%INPUT
 
-%Paso 1: Leer informaci?n
-
-filename = 'p14.csv';
+%filename: nombre del archivo csv
+%max_iter: m?ximo de iteraciones
 
 [m,n,p,Q,d,qi,fi,aks,Ci] = leer_datos(filename);
 m_bar = m*p; %numero de vehiculos en todo el periodo
@@ -50,7 +50,7 @@ Q_hat = cantidades(qi, Q );
 
 lambda = zeros(n+1,1); %vector inicial de lambdas
 
-[f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
+[~,~,~,~,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
 
 %Paso 6: Calcular z(DRF(lambda))
 
@@ -58,32 +58,21 @@ lambda = zeros(n+1,1); %vector inicial de lambdas
 
 %Paso 7: Actualizar lambda
 
-max_iter = 50;
-%zUB ;
-
 for i=1:max_iter
     epsilon = 1/i;
     lambda(1) = lambda(1)+2*epsilon*theta(1);
     lambda(2:end) = lambda(2:end)+2*epsilon*theta(2:end);
-    [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
+    [~,~,~,~,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
     z_lambda(i) = zDRF_lambda(n, m_bar,fi,w);
 end
 
-% for i=1:max_iter
-%     epsilon = (zUB-z_lambda(end))/norm(theta)^2;
-%     lambda(1) = lambda(1)+2*epsilon*theta(1);
-%     lambda(2:end) = lambda(2:end)+2*epsilon*theta(2:end);
-%     [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda);
-%     z_lambda(i) = zDRF_lambda(n, m_bar,fi,w);
-% end
+z = z_lambda(end);
+
+plot(1:max_iter,z_lambda,'b','LineWidth',2)
+title(filename(1:3))
+xlabel('iteraciones')
+ylabel('z(DRF)')
 
 
-plot(1:max_iter,z_lambda)
- 
-%Total de rutas
+end
 
-%res = 0
-
-%for i = 1:n
-%    res = res + nchoosek(n,1);
-%end
