@@ -1,4 +1,4 @@
-function [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,q,fi,I,lambda)
+function [f,R,psi,R_t,w,theta] = h1_paso1(n,Q_hat,m_bar,d,q,fi,I,lambda,Q)
 %PARAMETROS
 
 %n = numero de clientes 
@@ -75,9 +75,9 @@ R_t = cell(q_n,n);
 X = cell(n,3); %una columna para costos, otra para cantidades y otra para rutas
 
 for i = 1:n
-        [C,Q,R2] = matrices(i,f,Q_hat,q,R);
+        [C,R2] = matrices(i,f,Q_hat,R,Q);
         X{i,1} = C;
-        X{i,2} = Q;
+        X{i,2} = Q{i};
         X{i,3} = R2;
 end
 
