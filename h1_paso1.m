@@ -85,6 +85,7 @@ for j = 1: length(Q_hat)
     qi = Q_hat(j);
     for i = 1:n
         [a,~] = min(X{i,1}(ismember(X{i,2},qi)));
+        %[a,~] = min(X{i,1}(ismember(Q{i},qi)));
         if(isempty(a) == 0)
             psi(j,i) = a;
             R_t{j,i} = X{i,3}{ismember(X{i,2},qi)};

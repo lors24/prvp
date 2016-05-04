@@ -83,7 +83,7 @@ lambda = zeros(n+1,1); %vector inicial de lambdas
 
 for i=1:max_iter
     epsilon = 1/i;
-    lambda(1) = lambda(1)+2*epsilon*theta(1);
+    lambda(1) = lambda(1)+ 2*epsilon*theta(1);
     lambda(2:end) = lambda(2:end)+2*epsilon*theta(2:end);
     [~,~,~,~,w,theta] = h1_paso1(n,Q_hat,m_bar,d,qi,fi,I,lambda,Q);
     z_lambda(i) = zDRF_lambda(n, m_bar,fi,w);

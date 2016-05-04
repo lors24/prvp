@@ -48,13 +48,15 @@ end
 
 qi = M(ini+1:end,5);
 fi = M(ini+1:end,6);
+combs = M(ini+1:end,7);
 
+max_c = max(combs);
 
-aks_aux = cellstr(dec2bin(1:(2^p)-1)); %todas las combinaciones de dias posibles
+aks_aux = cellstr(dec2bin(1:(2^max_c)-1)); %todas las combinaciones de dias posibles
 
-comb = cellstr(dec2bin(M(ini+1:end,8:end),p)); %leer combinaciones y pasarlas a binario
+comb = cellstr(dec2bin(M(ini+1:end,8:end),max_c)); %leer combinaciones y pasarlas a binario
 [~,b]=ismember(comb,aks_aux);  % ver que combinacion de aks le pertence
-Ci = reshape(b,n,p); %pasar a forma de matriz
+Ci = reshape(b,n,max_c); %pasar a forma de matriz
 aks = (dec2bin(1:(2^p)-1))';
 
 end
